@@ -171,7 +171,7 @@ public class GetURLs {
         urlWriter.write("</html>");
         urlWriter.close();
 	}
-	
+	// author: Jin Dai 04102018
 	public static void main(String[] args) {
 		try {
 			// only consider posts after 2004, endOffset <= 8260

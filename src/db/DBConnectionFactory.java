@@ -1,7 +1,7 @@
 package db;
 
 import db.mongodb.MongoDBConnection;
-
+//author: Jin Dai 04102018
 public class DBConnectionFactory {
 	private static final String DEFAULT_DB = "mongodb";
 

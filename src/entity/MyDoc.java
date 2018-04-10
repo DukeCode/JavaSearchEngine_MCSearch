@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyDoc {
-	private String docID;
+	private String docId;
 	private String criticTitle;
 	private String movieTitle;
 	private String author;
@@ -19,7 +19,7 @@ public class MyDoc {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((docID == null) ? 0 : docID.hashCode());
+		result = prime * result + ((docId == null) ? 0 : docId.hashCode());
 		return result;
 	}
 	
@@ -35,11 +35,11 @@ public class MyDoc {
 			return false;
 		}	
 		MyDoc other = (MyDoc) obj;
-		if (docID == null) {
-			if (other.docID != null) {
+		if (docId == null) {
+			if (other.docId != null) {
 				return false;
 			}
-		} else if (!docID.equals(other.docID)) {
+		} else if (!docId.equals(other.docId)) {
 			return false;
 		}
 		return true;
@@ -48,9 +48,10 @@ public class MyDoc {
 	/**
 	 * This is a builder pattern in Java.
 	 */
+	// author: Jin Dai 04102018
 	// Constructor
 	private MyDoc(MyDocBuilder builder) {
-		this.docID = builder.docID;
+		this.docId = builder.docId;
 		this.criticTitle = builder.criticTitle;
 		this.movieTitle = builder.movieTitle;
 		this.author = builder.author;
@@ -63,7 +64,7 @@ public class MyDoc {
 	
 	// Builder Pattern
 	public static class MyDocBuilder {
-		private String docID;
+		private String docId;
 		private String criticTitle;
 		private String movieTitle;
 		private String author;
@@ -73,8 +74,8 @@ public class MyDoc {
 		private String nytPick;
 		private String summary;
 
-		public MyDocBuilder setDocID(String docID) {
-			this.docID = docID;
+		public MyDocBuilder setDocId(String docId) {
+			this.docId = docId;
 			return this;
 		}
 
@@ -125,8 +126,8 @@ public class MyDoc {
 	
 	// Getter
 	// only getter is needed because docs remain unchanged after inserted into the database
-	public String getDocID() {
-		return docID;
+	public String getDocId() {
+		return docId;
 	}
 	public String getCriticTitle() {
 		return criticTitle;
@@ -157,7 +158,7 @@ public class MyDoc {
 	public JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		try {
-			obj.put("doc_id", docID);
+			obj.put("doc_id", docId);
 			obj.put("criticTitle", criticTitle);
 			obj.put("movieTitle", movieTitle);
 			obj.put("author", author);

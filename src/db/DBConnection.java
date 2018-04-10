@@ -3,10 +3,10 @@ package db;
 import java.util.List;
 import java.util.Set;
 
-import entity.Document;
 import entity.MyDoc;
 import entity.Query;
-
+import entity.User;
+// author: Jin Dai 04102018
 public interface DBConnection {
 	/**
 	 * Close the connection.
@@ -15,78 +15,101 @@ public interface DBConnection {
 
 	// favorite docs
 	/**
-	 * Insert the favorite documents for a user.
+	 * add the favorite documents for a user.
 	 * 
-	 * @param userID
-	 * @param docIDs
+	 * @param userId
+	 * @param docIds
 	 */
-	public void setFavoriteDocs(String userID, List<String> docIDs);
+	public void addFavoriteDocs(String userId, List<String> docIds);
 
 	/**
-	 * Delete the favorite documents for a user.
+	 * delete the favorite documents for a user.
 	 * 
-	 * @param userID
-	 * @param docIDs
+	 * @param userId
+	 * @param docIds
 	 */
-	public void unsetFavoriteDocs(String userID, List<String> docIDs);
+	public void deleteFavoriteDocs(String userId, List<String> docIds);
 
 	/**
-	 * Get the favorite document ids for a user.
+	 * Get the favorite document Ids for a user.
 	 * 
-	 * @param userID
-	 * @return docIDs
+	 * @param userId
+	 * @return docIds
 	 */
-	public Set<String> getFavoriteDocIds(String userID);
+	public Set<String> getFavoriteDocIds(String userId);
 
 	/**
 	 * Get the favorite documents for a user.
 	 * 
-	 * @param userID
+	 * @param userId
 	 * @return documents
 	 */
-	public Set<MyDoc> getFavoriteDocs(String userID);
+	public Set<MyDoc> getFavoriteDocs(String userId);
 
 	// query logs
 	/**
-	 * Gets query log of a user
+	 * Get the query Ids for a user.
 	 * 
-	 * @param userID
-	 * @return queries
+	 * @param userId
+	 * @return docIds
 	 */
-	public Set<Query> getQueryLog(String userID);
+	public Set<String> getQueryIds(String userId);
 	
 	/**
-	 * save query log of a user
+	 * Gets query log of a user
 	 * 
-	 * @param userID
+	 * @param userId
+	 * @return queries
+	 */
+	public Set<Query> getQueryLog(String userId);
+	
+	/**
+	 * add query into query log of a user
+	 * 
+	 * @param userId
 	 * @param queries
 	 */
-	public void saveQuery(String userID, String queryContent, String userTime, String queryType);
+	public void addQuery(Query query);
 	
 	/**
 	 * delete query log of a user
 	 * 
-	 * @param userID
+	 * @param userId
 	 * @param queries
 	 */
-	public void deleteQueryLog(String userID, List<String> queryIDs);
+	public void deleteQuery(String userId, List<String> queryIds);
 	
-	// search
 	/**
-	 *
-	 * @param userID
-	 * @param queryContent
-	 * @param queryType
-	 * @param userTime
-	 *            (Nullable)
-	 * @return list of documents
+	 * Save document into db.
+	 * 
+	 * @param doc
 	 */
-	public List<MyDoc> searchDocuments(String userID, String queryContent, String queryType, String userTime);
+	public void addDoc(MyDoc doc);
+	
 
 	/**
 	 * Save document into db.
 	 * 
 	 * @param doc
 	 */
-	public void saveDoc(MyDoc doc);
+	public void addUser(User user);
+	
+	/**
+	 * Get full name of a user. (This is not needed for main course, just for demo
+	 * and extension).
+	 * 
+	 * @param userId
+	 * @return full name of the user
+	 */
+	public String getFullname(String userId);
+
+	/**
+	 * Return whether the credential is correct. (This is not needed for main
+	 * course, just for demo and extension)
+	 * 
+	 * @param userId
+	 * @param password
+	 * @return boolean
+	 */
+	public boolean verifyLogin(String userId, String password);
 }

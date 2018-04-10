@@ -3,4 +3,4 @@ package db.mongodb;
 public class MongoDBUtil {
 	public static final String DB_NAME = "mcSearch";
 }
-
+//author: Jin Dai 04102018

@@ -16,6 +16,7 @@ import com.mongodb.client.MongoDatabase;
 import db.DBConnection;
 import entity.MyDoc;
 import entity.Query;
+import entity.User;
 import entity.MyDoc.MyDocBuilder;
 
 public class MongoDBConnection implements DBConnection {
@@ -36,21 +37,21 @@ public class MongoDBConnection implements DBConnection {
 	}
 
 	@Override
-	public void setFavoriteDocs(String userID, List<String> docIDs) {
-		db.getCollection("users").updateOne(new Document("user_id", userID),
-				new Document("$push", new Document("favorite", new Document("$each", docIDs))));
+	public void addFavoriteDocs(String userId, List<String> docIds) {
+		db.getCollection("users").updateOne(new Document("user_id", userId),
+				new Document("$push", new Document("favorite", new Document("$each", docIds))));
 	}
 
 	@Override
-	public void unsetFavoriteDocs(String userID, List<String> docIDs) {
-		db.getCollection("users").updateOne(new Document("user_id", userID),
-				new Document("$pullAll", new Document("favorite", docIDs)));
+	public void deleteFavoriteDocs(String userId, List<String> docIds) {
+		db.getCollection("users").updateOne(new Document("user_id", userId),
+				new Document("$pullAll", new Document("favorite", docIds)));
 	}
 
 	@Override
-	public Set<String> getFavoriteDocIds(String userID) {
+	public Set<String> getFavoriteDocIds(String userId) {
 		Set<String> favoriteDocIds = new HashSet<String>();
-		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", userID));
+		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", userId));
 		if (iterable.first().containsKey("favorite")) {
 			@SuppressWarnings("unchecked")
 			List<String> list = (List<String>) iterable.first().get("favorite");
@@ -60,14 +61,14 @@ public class MongoDBConnection implements DBConnection {
 	}
 
 	@Override
-	public Set<MyDoc> getFavoriteDocs(String userID) {
-		Set<String> favoriteDocIds = getFavoriteDocIds(userID);
+	public Set<MyDoc> getFavoriteDocs(String userId) {
+		Set<String> favoriteDocIds = getFavoriteDocIds(userId);
 		Set<MyDoc> favoriteDocs = new HashSet<>();
 		for (String favoriteDocId : favoriteDocIds) {
-			FindIterable<Document> iterable = db.getCollection("docs").find(eq("doc_id", favoriteDocIds));
+			FindIterable<Document> iterable = db.getCollection("docs").find(eq("doc_id", favoriteDocId));
 			Document doc = iterable.first();
 			MyDocBuilder builder = new MyDocBuilder();
-			builder.setDocID(doc.getString("doc_id"));
+			builder.setDocId(doc.getString("doc_id"));
 			builder.setCriticTitle(doc.getString("criticTitle"));
 			builder.setMovieTitle(doc.getString("movieTitle"));
 			builder.setAuthor(doc.getString("author"));
@@ -83,58 +84,99 @@ public class MongoDBConnection implements DBConnection {
 	}
 
 	@Override
-	public Set<Query> getQueryLog(String userID) {
-		Set<Query> queryLog = new HashSet<Query>();
-		FindIterable<Document> queries = db.getCollection("queries").find(eq("userID", userID));
-		if (queries == null) {
-			return queryLog;
-		}
-		for (Document doc : docs) {
-			
-		}
-		if (iterable.first().containsKey("favorite")) {
+	public Set<String> getQueryIds(String userId) {
+		Set<String> queryIds = new HashSet<String>();
+		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", userId));
+		if (iterable.first().containsKey("query")) {
 			@SuppressWarnings("unchecked")
-			List<String> list = (List<String>) iterable.first().get("favorite");
-			favoriteDocIds.addAll(list);
+			List<String> list = (List<String>) iterable.first().get("query");
+			queryIds.addAll(list);
 		}
-		return favoriteDocIds;
+		return queryIds;
+	}
+	
+	@Override
+	public Set<Query> getQueryLog(String userId) {
+		Set<String> queryIds = getQueryIds(userId);
+		Set<Query> queryLog = new HashSet<Query>();
+		for (String queryId : queryIds) {
+			FindIterable<Document> iterable = db.getCollection("queries").find(eq("query_id", queryId));
+			Document query = iterable.first();
+			Query q = new Query(query.getLong("query_id"), query.getString("user_id"), query.getString("content"),
+					query.getLong("userTime"), query.getLong("timeStamp"), query.getString("queryType"));
+
+			queryLog.add(q);
+		}
+		return queryLog;
 	}
 
 	@Override
-	public List<Event> searchEvents(String userId, double lat, double lon, String term) {
-		// Connect to external API
-		API api = APIFactory.getExternalAPI(); // moved here
-		List<Event> events = api.search(lat, lon, term);
-		for (Event event : events) {
-			saveEvent(event);
-		}
-		return events;
-	}
-
-	@Override
-	public void saveEvent(Event event) {
-
-		FindIterable<Document> iterable = db.getCollection("items").find(eq("item_id", event.getEventId()));
+	public void addQuery(Query query) {
+		FindIterable<Document> iterable = db.getCollection("queries").find(eq("query_id", query.getQueryId()));
 		if (iterable.first() == null) {
-			db.getCollection("items")
-					.insertOne(new Document().append("item_id", event.getEventId()).append("name", event.getName())
-							.append("city", event.getCity()).append("state", event.getState())
-							.append("country", event.getCountry()).append("zip_code", event.getZipcode())
-							.append("rating", event.getRating()).append("address", event.getAddress())
-							.append("latitude", event.getLatitude()).append("longitude", event.getLongitude())
-							.append("description", event.getDescription()).append("snippet", event.getSnippet())
-							.append("snippet_url", event.getSnippetUrl()).append("image_url", event.getImageUrl())
-							.append("url", event.getUrl()).append("categories", event.getCategories()));
+			FindIterable<Document> iterableUser = db.getCollection("users").find(eq("user_id", query.getQueryId()));
+			long queryCount = iterableUser.first().getLong("queryCount");
+			queryCount++;
+			db.getCollection("users").updateOne(eq("user_id", query.getUserId()), new Document("$set", new Document("queryCount", queryCount)));
+			db.getCollection("users").updateOne(new Document("user_id", query.getUserId()),
+					new Document("$push", new Document("query", new Document("$each", query.getQueryId()))));
+			db.getCollection("queries")
+					.insertOne(new Document().append("query_id", queryCount).append("userId", query.getUserId())
+							.append("content", query.getContent()).append("userTime", query.getUserTime()).append("timeStamp", query.getTimeStamp())
+							.append("queryType", query.getQueryType()));
+		}
+	}
+	
+	@Override
+	public void deleteQuery(String userId, List<String> queryIds) {
+		db.getCollection("users").updateOne(new Document("user_id", userId),
+				new Document("$pullAll", new Document("query", queryIds)));
+		for (String queryId : queryIds) {
+			db.getCollection("queries").deleteOne(new Document("query_id", queryId));
+		}
+	}
+	
+	@Override
+	public void addDoc(MyDoc doc) {
+		FindIterable<Document> iterable = db.getCollection("docs").find(eq("doc_id", doc.getDocId()));
+		if (iterable.first() == null) {
+			db.getCollection("docs")
+					.insertOne(new Document().append("doc_id", doc.getDocId()).append("criticTitle", doc.getCriticTitle())
+							.append("movieTitle", doc.getMovieTitle()).append("author", doc.getAuthor())
+							.append("url", doc.getUrl()).append("imageUrl", doc.getImageUrl())
+							.append("mpaaRate", doc.getMpaaRate()).append("nytPick", doc.getNytPick())
+							.append("summary", doc.getSummary()));
+		}
+	}
+	
+	@Override
+	public void addUser(User user) {
+		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", user.getUserId()));
+		if (iterable.first() == null) {
+			db.getCollection("users")
+			.insertOne(new Document().append("user_id", user.getUserId()).append("firstName", user.getFirstName())
+					.append("lastName", user.getLastName()).append("email", user.getEmail())
+					.append("password", user.getPassword()).append("queryCount",user.getQueryCount()));
 		}
 	}
 
 	@Override
 	public String getFullname(String userId) {
-		return null;
+		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", userId));
+		StringBuffer sb = new StringBuffer();
+		Document user = iterable.first();
+		sb.append(user.get("firstName")).append(user.get("lastName"));
+		return sb.toString();
 	}
 
 	@Override
 	public boolean verifyLogin(String userId, String password) {
+		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", userId));
+		String pwd = iterable.first().getString("password");
+		if (password.equals(pwd)) {
+			return true;
+		}
 		return false;
 	}
 }
+//author: Jin Dai 04102018

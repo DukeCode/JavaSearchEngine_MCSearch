@@ -70,6 +70,7 @@ public class ReadCSV {
 				}
 				line2 = br2.readLine();
 			}
+			// author: Jin Dai 04102018
 			br2.close();
 			wr.write("</body>");
 	        wr.newLine();

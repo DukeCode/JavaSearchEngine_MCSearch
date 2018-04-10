@@ -8,6 +8,7 @@ public class NoURLException extends Exception {
 	public NoURLException(String message) {
 		super(message);
 	}
+	// author: Jin Dai 04102018
 	public String getMessage() {
 		return super.getMessage();
 	}

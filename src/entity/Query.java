@@ -1,39 +1,45 @@
 package entity;
 
-import java.sql.Timestamp;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Query {
-	private String queryID;
-	private String userID;
+	private Long queryId;
+	private String userId;
 	private String content;
-	private String userTime; // local time based on user location, provided by front-end
+	private Long userTime; // local time based on user location, provided by front-end
 	private String queryType;
 	private long timeStamp;
 	
-	public Query(String queryID, String userID, String content, String userTime, String queryType) {
-		this.queryID = queryID;
-		this.userID = userID;
+	public Query(Long queryId, String userId, String content, Long userTime, Long timeStamp, String queryType) {
+		this.queryId = queryId;
+		this.userId = userId;
 		this.content = content;
 		this.userTime = userTime;
-		Timestamp tempTime = new Timestamp(System.currentTimeMillis());
-		this.timeStamp = tempTime.getTime();
+		this.timeStamp = timeStamp; // timeStamp is generated based on milis
 		this.queryType = queryType;
 	}
 	
-	// Getter
-	public String getQueryID() {
-		return queryID;
+	public Query(String userId, String content, Long userTime, Long timeStamp, String queryType) {
+		this.queryId = 0L;
+		this.userId = userId;
+		this.content = content;
+		this.userTime = userTime;
+		this.timeStamp = timeStamp; // timeStamp is generated based on milis
+		this.queryType = queryType;
 	}
-	public String getUserID() {
-		return userID;
+	// author: Jin Dai 04102018
+	// Getter
+	public Long getQueryId() {
+		return queryId;
+	}
+	public String getUserId() {
+		return userId;
 	}
 	public String getContent() {
 		return content;
 	}
-	public String getUserTime() {
+	public Long getUserTime() {
 		return userTime;
 	}
 	public long getTimeStamp() {
@@ -47,8 +53,8 @@ public class Query {
 	public JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		try {
-			obj.put("query_id", queryID);
-			obj.put("userID", userID);
+			obj.put("query_id", queryId);
+			obj.put("userId", userId);
 			obj.put("content", content);
 			obj.put("userTime", userTime);
 			obj.put("timeStamp", timeStamp);
