@@ -8,6 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 
+/*
+ * for test use only
+ */
 public class ReadCSV {
 	public static void main(String[] args) {
 		read("c3360to4180.csv", "3360to4180url.html", "3360to4180Padding.html");

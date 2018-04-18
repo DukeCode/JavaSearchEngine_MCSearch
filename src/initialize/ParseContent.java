@@ -18,6 +18,7 @@ public class ParseContent {
 			try {
 				read(starter[i], ender[i]);
 			} catch (IOException e) {
+				System.out.println("error");
 				e.getMessage();
 			}
 		}		
@@ -109,8 +110,10 @@ public class ParseContent {
 			}
 		}
 		// read through resource file
+		int indexInt = starter;
 		String line2 = null;
 		while((line2 = brReso.readLine()) != null) {
+			String indexString = Integer.toString(indexInt);
 			if (!criticContent.containsKey(line2.trim())) {
 				int tempCount = 0;
 				while (tempCount < 8) {
@@ -120,6 +123,8 @@ public class ParseContent {
 				continue;
 			}
 			int count = 0;
+			brpReso.write(indexString);
+			brpReso.newLine();
 			brpReso.write(line2.trim());
 			brpReso.newLine();
 			while (count < 8) {
@@ -127,16 +132,22 @@ public class ParseContent {
 				brpReso.write(tempLine);
 				brpReso.newLine();
 				if (count == 1) {
+					brpTitle.write(indexString);
+					brpTitle.newLine();
 					brpTitle.write(line2.trim());
 					brpTitle.newLine();
 					brpTitle.write(tempLine);
 					brpTitle.newLine();
 				} else if (count == 4) {
+					brpAuthor.write(indexString);
+					brpAuthor.newLine();
 					brpAuthor.write(line2.trim());
 					brpAuthor.newLine();
 					brpAuthor.write(tempLine);
 					brpAuthor.newLine();
 				} else if (count == 5) {
+					brpCTitle.write(indexString);
+					brpCTitle.newLine();
 					brpCTitle.write(line2.trim());
 					brpCTitle.newLine();
 					brpCTitle.write(tempLine);
@@ -144,10 +155,13 @@ public class ParseContent {
 				}
 				count++;
 			}
+			brpCont.write(indexString);
+			brpCont.newLine();
 			brpCont.write(line2.trim());
 			brpCont.newLine();
 			brpCont.write(criticContent.get(line2.trim()).toString());
 			brpCont.newLine();
+			indexInt++;
 		}
 		brCont.close();
 		brReso.close();
