@@ -16,7 +16,7 @@ import init.tools.MinHeap;
  *  both pseudo relevance feedback and smoothing method is used
  */
 public class GeneralSearch {
-	// equation: 10*titleScore + 5*ctitleScore + 1*contentScore + 2*authorScore
+	// equation: 10*titleScore + 5*ctitleScore + 2*contentScore + 1*authorScore
 	// why use + rather than *? because we treat them as different model and actually they are
 	// tested with actual dataset, + relationship gives the best results
 	public List<EngDoc> retrieveQuery(String queryContent, int TopN) throws Exception {
@@ -67,7 +67,7 @@ public class GeneralSearch {
 				continue;
 			}
 			double tempScore = map.get(doc.docid());
-			tempScore = tempScore + doc.score();
+			tempScore = tempScore + doc.score() * 2;
 			map.put(doc.docid(), tempScore);
 		}
 		
@@ -77,7 +77,7 @@ public class GeneralSearch {
 				continue;
 			}
 			double tempScore = map.get(doc.docid());
-			tempScore = tempScore + doc.score() * 2;
+			tempScore = tempScore + doc.score();
 			map.put(doc.docid(), tempScore);
 		}
 		
