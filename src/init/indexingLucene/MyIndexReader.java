@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
@@ -28,8 +29,10 @@ public class MyIndexReader {
 	public Directory directory;
 	private DirectoryReader ireader;
 	private IndexSearcher isearcher;
+//	private IndexWriter ixwriter;
 	
 	public MyIndexReader( String dataType ) throws IOException {
+	    
 		if (dataType.equals("title")) {
 			directory = FSDirectory.open(Paths.get(AllPath.titleIndex));  
 		} else if (dataType.equals("author")) {
@@ -41,6 +44,11 @@ public class MyIndexReader {
 		} else {
 			System.err.println("undefined data type");
 		}
+		
+//		IndexWriterConfig indexConfig=new IndexWriterConfig(new WhitespaceAnalyzer());
+//		indexConfig.setMaxBufferedDocs(10000);
+//		ixwriter = new IndexWriter( directory, indexConfig);
+//		ixwriter.commit();
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 	}
@@ -181,5 +189,4 @@ public class MyIndexReader {
 		ireader.close();
 		directory.close();
 	}
-	
 }

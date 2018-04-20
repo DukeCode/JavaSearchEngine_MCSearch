@@ -33,6 +33,9 @@ public class ExtractQuery {
 	// aggregated content pre-process
 	public String process(String queryContent) {
 		// remove punctuation
+		if (queryContent == null || queryContent.equals("")) {
+			return "";
+		}
 		queryContent = queryContent.replaceAll("[^a-zA-Z]", " ").trim(); 
 
 		// process content

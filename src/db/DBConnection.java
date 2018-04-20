@@ -46,6 +46,14 @@ public interface DBConnection {
 	 */
 	public Set<MyDoc> getFavoriteDocs(String userId);
 
+	/**
+	 * Get the favorite documents for a user.
+	 * 
+	 * @param userId
+	 * @return documents
+	 */
+	public MyDoc getDoc(String docId);
+	
 	// query logs
 	/**
 	 * Get the query Ids for a user.

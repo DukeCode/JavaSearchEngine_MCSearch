@@ -34,6 +34,10 @@ public class QueryRetrievalModel {
 
 	public List<EngDoc> retrieveQuery(String queryContent, int TopN) throws Exception {
 		List<EngDoc> results = new ArrayList<EngDoc>();
+		// corner case
+		if (queryContent.equals("")) {
+			return results;
+		}
 		Query theQ = new QueryParser("CONTENT", new WhitespaceAnalyzer()).parse(queryContent);
 		ScoreDoc[] scoreDoc = indexSearcher.search(theQ, TopN).scoreDocs;
 		for (ScoreDoc score : scoreDoc) {
@@ -41,5 +45,4 @@ public class QueryRetrievalModel {
 		}
 		return results;
 	}
-
 }

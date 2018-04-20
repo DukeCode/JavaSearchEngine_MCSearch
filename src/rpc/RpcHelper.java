@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import entity.Event;
+import entity.MyDoc;
+
 /*
  *  A Class to help write JSON data to http response
  *  - Organize the repeated codes for scalable usage
@@ -62,11 +63,11 @@ public class RpcHelper {
 	
 	//For test
 	// Converts a list of Event objects to JSONArray.
-	public static JSONArray getJSONArray(List<Event> Events) {
+	public static JSONArray getJSONArray(List<MyDoc> myDocs) {
 		JSONArray result = new JSONArray();
 		try {
-			for (Event Event : Events) {
-				result.put(Event.toJSONObject());
+			for (MyDoc myDoc : myDocs) {
+				result.put(myDoc.toJSONObject());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

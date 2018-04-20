@@ -13,6 +13,7 @@ public class MyDoc {
 	private String mpaaRate;
 	private String nytPick;
 	private String summary;
+	private String publicationDate;
 	
 	@Override
 	// for de-duplicate
@@ -60,6 +61,7 @@ public class MyDoc {
 		this.mpaaRate = builder.mpaaRate;
 		this.nytPick = builder.nytPick;
 		this.summary = builder.summary;
+		this.publicationDate = builder.publicationDate;
 	}
 	
 	// Builder Pattern
@@ -73,6 +75,7 @@ public class MyDoc {
 		private String mpaaRate;
 		private String nytPick;
 		private String summary;
+		private String publicationDate;
 
 		public MyDocBuilder setDocId(String docId) {
 			this.docId = docId;
@@ -119,6 +122,11 @@ public class MyDoc {
 			return this;
 		}
 		
+		public MyDocBuilder setPublicationDate(String publicationDate) {
+			this.publicationDate = publicationDate;
+			return this;
+		}
+		
 		public MyDoc build() {
 			return new MyDoc(this);
 		}
@@ -153,6 +161,9 @@ public class MyDoc {
 	public String getSummary() {
 		return summary;
 	}
+	public String getPublicationDate() {
+		return publicationDate;
+	}
 	
 	// Convert to JSON
 	public JSONObject toJSONObject() {
@@ -167,6 +178,7 @@ public class MyDoc {
 			obj.put("mpaaRate", mpaaRate);
 			obj.put("nytPick", nytPick);
 			obj.put("summary", summary);
+			obj.put("publicationDate", publicationDate);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

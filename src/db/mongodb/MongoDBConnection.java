@@ -149,6 +149,21 @@ public class MongoDBConnection implements DBConnection {
 		}
 	}
 	
+	@Override 
+	public MyDoc getDoc(String docId) {
+		FindIterable<Document> iterable = db.getCollection("docs").find(eq("doc_id", docId));
+		Document doc = iterable.first();
+		MyDocBuilder docBuilder = new MyDocBuilder();
+		docBuilder.setDocId(doc.getString("doc_id")).setMovieTitle(doc.getString("movieTitle"));
+		docBuilder.setCriticTitle(doc.getString("criticTitle")).setAuthor(doc.getString("author"));
+		docBuilder.setUrl(doc.getString("url")).setImageUrl(doc.getString("imgUrl"));
+		docBuilder.setMpaaRate(doc.getString("mpaaRate")).setNytPick(doc.getString("nytPick"));
+		docBuilder.setSummary(doc.getString("summary")).setPublicationDate(doc.getString("publicationDate"));
+		MyDoc found = docBuilder.build();
+		return found;
+	}
+	
+	
 	@Override
 	public void addUser(User user) {
 		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id", user.getUserId()));
