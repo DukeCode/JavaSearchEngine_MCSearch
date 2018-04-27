@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>General Search</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./../css/1-col-portfolio.css" rel="stylesheet">
+
+  </head>
+
+  <body onload = "retrival();">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="./../index.html">Movie Review Search</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="./../index.html">General Search
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+			<li class="nav-item">
+              <a class="nav-link" href="complicatedmain.html">Complicated Search</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Search -->
+    <div class="container">
+  
+	<br>
+	<br>
+	
+      <!-- Project One -->
+	  <div class = "row" >
+	  <div class = "col-md-4 container">
+      <div class="row">
+	  <div class = "col-md-12"> 
+		<a href = "./../index.html"><img src = "./../resource/logo.png" style = "width:3em;height:3em;" class = "logo"/></a>
+		</div>
+		</div>
+		</div>
+		<div class = "col-md-8 container">
+		  <div class="row"><br></div>
+		  <div class="row"><br></div>
+		  <div class="row"><br></div>
+		  <div class="row"><br></div>
+      <div class="row">
+	
+	  <input class = "col-md-8" id = "queryinput" type = "text"  placeholder="Enter your query here!" ></input> 
+	  <div class = "col-md-1"> </div>
+	  <button class = "col-md-2 btn btn-info" onclick = "send();" >Search</button>
+	  <div class = "col-md-1"> </div>
+	  </div>
+		</div>
+		</div>
+	
+  
+      </div>
+	  
+      <!-- /.row -->
+	  
+	 <br>
+<br>
+<br>	 
+    </div>
+    <!-- /.container -->
+	
+	 <!-- Result -->
+	<div class="container" id = "resultplace">
+  
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; https://www.nytimes.com/reviews/movies</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="./../vendor/jquery/jquery.min.js"></script>
+    <script src="./../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+	<script type="text/javascript">
+		var userquery;
+		var ret_length;
+		var jsons;
+		
+		var searcharea = document.getElementById("queryinput");	
+		searcharea.addEventListener("keyup", function(event) {
+		event.preventDefault();
+		if (event.keyCode === 13) {
+				send();
+			}
+		});
+		
+		function highlight(t){
+	
+		var terms = userquery.split(' ');
+		var contents = t.split(' ');
+		var highlighted = "";
+		var outputted = false;
+		
+		for(var i = 0;i<contents.length;i++){
+			for(var j = 0;j<terms.length;j++){
+				if(contents[i].toLowerCase().includes(terms[j].toLowerCase())){
+					highlighted = highlighted + '<span style = "color:red">' + contents[i] + " " + '</span>';
+					outputted = true;
+					break;
+				}
+				else{
+					
+				}
+			}
+			if(!outputted) highlighted = highlighted + contents[i] + " ";
+			outputted = false;
+		}
+		
+		return highlighted;
+		
+		}
+		
+		function insertbutton(){
+			var resultplace = document.getElementById("resultplace");
+			var button_area = document.createElement("ul");
+			button_area.className = "pagination justify-content-center";
+			
+			if(ret_length > 10){
+				var button_1 = document.createElement("li");
+				var link_1 = document.createElement("a");
+				link_1.innerText = "1";
+				link_1.className = "page-link";
+				button_1.className = "page-item";
+				link_1.onclick = loadpage1;
+				button_1.appendChild(link_1);
+				button_area.appendChild(button_1);
+							
+				var button_2 = document.createElement("li");
+				var link_2 = document.createElement("a");
+				link_2.innerText = "2";
+				link_2.className = "page-link";
+				button_2.className = "page-item";
+				link_2.onclick = loadpage2;
+				button_2.appendChild(link_2);
+				button_area.appendChild(button_2);
+			}
+			if(ret_length > 20){
+				var button_3 = document.createElement("li");
+				var link_3 = document.createElement("a");
+				link_3.innerText = "3";
+				link_3.className = "page-link";
+				button_3.className = "page-item";
+				link_3.onclick = loadpage3;
+				button_3.appendChild(link_3);
+				button_area.appendChild(button_3);
+			}
+			if(ret_length > 30){
+				var button_4 = document.createElement("li");
+				var link_4 = document.createElement("a");
+				link_4.innerText = "4";
+				link_4.className = "page-link";
+				button_4.className = "page-item";
+				link_4.onclick = loadpage4;
+				button_4.appendChild(link_4);
+				button_area.appendChild(button_4);
+			}
+			if(ret_length > 40){
+				var button_5 = document.createElement("li");
+				var link_5 = document.createElement("a");
+				link_5.innerText = "5";
+				link_5.className = "page-link";
+				button_5.className = "page-item";
+				link_5.onclick = loadpage5;
+				button_5.appendChild(link_5);
+				button_area.appendChild(button_5);
+			}
+			
+			
+			resultplace.appendChild(button_area);
+		
+		}
+		
+		function loadpage1(){
+		var resultplace = document.getElementById("resultplace");
+		resultplace.innerHTML = "";
+		
+			var i = 0;
+			var maxress = 10;
+			if(ret_length < 10) maxress = ret_length;
+			
+			for(i;i<maxress;i++){
+			
+				var blank = document.createElement("hr");
+				resultplace.appendChild(blank);
+				
+				var row = document.createElement("div");
+				row.className  = "row resultrow";
+				
+				var json = jsons[i];
+				
+				var criticTitle = json.criticTitle;
+				criticTitle = highlight(criticTitle);
+				var imageUrl = json.imageUrl;
+				if(imageUrl === "default") imageUrl = "./../resource/" + imageUrl + ".jpg";
+				var summary = json.summary;
+				summary = highlight(summary);
+				var author = json.author;
+				author = highlight(author);
+				var nytPick = json.nytPick;
+				var movieTitle = json.movieTitle;
+				movieTitle = highlight(movieTitle);
+				var publicationDate = json.publicationDate;
+				var url = json.url;
+				var mpaaRate = json.mpaaRate;
+				 
+				
+				var start =  '<div class="col-md-12"></div>';
+				var mtitle = '<div class = "col-md-4 container"><div class = "row"><div class="col-md-12"><h3>'+ movieTitle +'</h3></div>';
+				var mmprating = '<div class="col-md-8"><h5>Rating: '+ mpaaRate +'</h4></div>';
+				var NYTPick;
+				if(nytPick == "Y"){
+					NYTPick = '<div class="col-md-4"><h4>NYT Pick!</h4></div>';
+				}
+				else{
+					NYTPick = '<div class="col-md-4"><h4></h4></div>';
+				}
+				var resimage = '<div class="col-md-12"><a href="'+url+'"><img class="img-fluid rounded mb-3 mb-md-0" src="'+ imageUrl +'"></a></div></div></div>';
+				
+				var ctitle = '<div class="col-md-8 container"><div class="row"><div class="col-md-12"><a href="'+url+'"><h3>'+criticTitle+'</h3></a></div>';
+				var authorname = '<div class="col-md-5"><h4>'+ author +'</h4></div>';
+				var pdate = '<div class="col-md-7"><h4>'+ publicationDate +'</h4></div>';
+				var ressummary =  '<div class="col-md-12"><p>' + summary + '</p></div></div></div>';
+				var resurl = '<div class="col-md-12"><a href="'+url+'"><h5>' + url + '</h5></a></div><div class="col-md-12"></div>';
+				
+				
+				row.innerHTML = start + mtitle + mmprating + NYTPick + resimage + ctitle + authorname + pdate + ressummary + resurl;
+				
+				
+				resultplace.appendChild(row);
+				resultplace.appendChild(blank);
+				
+			}
+			
+			insertbutton();
+		}
+		function loadpage2(){
+		var resultplace = document.getElementById("resultplace");
+		resultplace.innerHTML = "";
+		
+			var i = 10;
+			var maxress = 20;
+			if(ret_length < 20) maxress = ret_length;
+			
+			for(i;i<maxress;i++){
+			
+				var blank = document.createElement("hr");
+				resultplace.appendChild(blank);
+				
+				var row = document.createElement("div");
+				row.className  = "row resultrow";
+				
+				var json = jsons[i];
+				
+				var criticTitle = json.criticTitle;
+				criticTitle = highlight(criticTitle);
+				var imageUrl = json.imageUrl;
+				if(imageUrl === "default") imageUrl = "./../resource/" + imageUrl + ".jpg";
+				var summary = json.summary;
+				summary = highlight(summary);
+				var author = json.author;
+				author = highlight(author);
+				var nytPick = json.nytPick;
+				var movieTitle = json.movieTitle;
+				movieTitle = highlight(movieTitle);
+				var publicationDate = json.publicationDate;
+				var url = json.url;
+				var mpaaRate = json.mpaaRate;
+				 
+				
+				var start =  '<div class="col-md-12"></div>';
+				var mtitle = '<div class = "col-md-4 container"><div class = "row"><div class="col-md-12"><h3>'+ movieTitle +'</h3></div>';
+				var mmprating = '<div class="col-md-8"><h5>Rating: '+ mpaaRate +'</h4></div>';
+				var NYTPick;
+				if(nytPick == "Y"){
+					NYTPick = '<div class="col-md-4"><h4>NYT Pick!</h4></div>';
+				}
+				else{
+					NYTPick = '<div class="col-md-4"><h4></h4></div>';
+				}
+				var resimage = '<div class="col-md-12"><a href="'+url+'"><img class="img-fluid rounded mb-3 mb-md-0" src="'+ imageUrl +'"></a></div></div></div>';
+				
+				var ctitle = '<div class="col-md-8 container"><div class="row"><div class="col-md-12"><a href="'+url+'"><h3>'+criticTitle+'</h3></a></div>';
+				var authorname = '<div class="col-md-5"><h4>'+ author +'</h4></div>';
+				var pdate = '<div class="col-md-7"><h4>'+ publicationDate +'</h4></div>';
+				var ressummary =  '<div class="col-md-12"><p>' + summary + '</p></div></div></div>';
+				var resurl = '<div class="col-md-12"><a href="'+url+'"><h5>' + url + '</h5></a></div><div class="col-md-12"></div>';
+				
+				
+				row.innerHTML = start + mtitle + mmprating + NYTPick + resimage + ctitle + authorname + pdate + ressummary + resurl;
+				
+				
+				resultplace.appendChild(row);
+				resultplace.appendChild(blank);
+				
+			}
+			
+			insertbutton();
+		}
+		function loadpage3(){
+		var resultplace = document.getElementById("resultplace");
+		resultplace.innerHTML = "";
+		
+			var i = 20;
+			var maxress = 30;
+			if(ret_length < 30) maxress = ret_length;
+			
+			for(i;i<maxress;i++){
+			
+				var blank = document.createElement("hr");
+				resultplace.appendChild(blank);
+				
+				var row = document.createElement("div");
+				row.className  = "row resultrow";
+				
+				var json = jsons[i];
+				
+				var criticTitle = json.criticTitle;
+				criticTitle = highlight(criticTitle);
+				var imageUrl = json.imageUrl;
+				if(imageUrl === "default") imageUrl = "./../resource/" + imageUrl + ".jpg";
+				var summary = json.summary;
+				summary = highlight(summary);
+				var author = json.author;
+				author = highlight(author);
+				var nytPick = json.nytPick;
+				var movieTitle = json.movieTitle;
+				movieTitle = highlight(movieTitle);
+				var publicationDate = json.publicationDate;
+				var url = json.url;
+				var mpaaRate = json.mpaaRate;
+				 
+				
+				var start =  '<div class="col-md-12"></div>';
+				var mtitle = '<div class = "col-md-4 container"><div class = "row"><div class="col-md-12"><h3>'+ movieTitle +'</h3></div>';
+				var mmprating = '<div class="col-md-8"><h5>Rating: '+ mpaaRate +'</h4></div>';
+				var NYTPick;
+				if(nytPick == "Y"){
+					NYTPick = '<div class="col-md-4"><h4>NYT Pick!</h4></div>';
+				}
+				else{
+					NYTPick = '<div class="col-md-4"><h4></h4></div>';
+				}
+				var resimage = '<div class="col-md-12"><a href="'+url+'"><img class="img-fluid rounded mb-3 mb-md-0" src="'+ imageUrl +'"></a></div></div></div>';
+				
+				var ctitle = '<div class="col-md-8 container"><div class="row"><div class="col-md-12"><a href="'+url+'"><h3>'+criticTitle+'</h3></a></div>';
+				var authorname = '<div class="col-md-5"><h4>'+ author +'</h4></div>';
+				var pdate = '<div class="col-md-7"><h4>'+ publicationDate +'</h4></div>';
+				var ressummary =  '<div class="col-md-12"><p>' + summary + '</p></div></div></div>';
+				var resurl = '<div class="col-md-12"><a href="'+url+'"><h5>' + url + '</h5></a></div><div class="col-md-12"></div>';
+				
+				
+				row.innerHTML = start + mtitle + mmprating + NYTPick + resimage + ctitle + authorname + pdate + ressummary + resurl;
+				
+				
+				resultplace.appendChild(row);
+				resultplace.appendChild(blank);
+				
+			}
+			
+			insertbutton();
+		}
+		function loadpage4(){
+		var resultplace = document.getElementById("resultplace");
+		resultplace.innerHTML = "";
+		
+			var i = 30;
+			var maxress = 40;
+			if(ret_length < 40) maxress = ret_length;
+			
+			for(i;i<maxress;i++){
+			
+				var blank = document.createElement("hr");
+				resultplace.appendChild(blank);
+				
+				var row = document.createElement("div");
+				row.className  = "row resultrow";
+				
+				var json = jsons[i];
+				
+				var criticTitle = json.criticTitle;
+				criticTitle = highlight(criticTitle);
+				var imageUrl = json.imageUrl;
+				if(imageUrl === "default") imageUrl = "./../resource/" + imageUrl + ".jpg";
+				var summary = json.summary;
+				summary = highlight(summary);
+				var author = json.author;
+				author = highlight(author);
+				var nytPick = json.nytPick;
+				var movieTitle = json.movieTitle;
+				movieTitle = highlight(movieTitle);
+				var publicationDate = json.publicationDate;
+				var url = json.url;
+				var mpaaRate = json.mpaaRate;
+				 
+				
+				var start =  '<div class="col-md-12"></div>';
+				var mtitle = '<div class = "col-md-4 container"><div class = "row"><div class="col-md-12"><h3>'+ movieTitle +'</h3></div>';
+				var mmprating = '<div class="col-md-8"><h5>Rating: '+ mpaaRate +'</h4></div>';
+				var NYTPick;
+				if(nytPick == "Y"){
+					NYTPick = '<div class="col-md-4"><h4>NYT Pick!</h4></div>';
+				}
+				else{
+					NYTPick = '<div class="col-md-4"><h4></h4></div>';
+				}
+				var resimage = '<div class="col-md-12"><a href="'+url+'"><img class="img-fluid rounded mb-3 mb-md-0" src="'+ imageUrl +'"></a></div></div></div>';
+				
+				var ctitle = '<div class="col-md-8 container"><div class="row"><div class="col-md-12"><a href="'+url+'"><h3>'+criticTitle+'</h3></a></div>';
+				var authorname = '<div class="col-md-5"><h4>'+ author +'</h4></div>';
+				var pdate = '<div class="col-md-7"><h4>'+ publicationDate +'</h4></div>';
+				var ressummary =  '<div class="col-md-12"><p>' + summary + '</p></div></div></div>';
+				var resurl = '<div class="col-md-12"><a href="'+url+'"><h5>' + url + '</h5></a></div><div class="col-md-12"></div>';
+				
+				
+				row.innerHTML = start + mtitle + mmprating + NYTPick + resimage + ctitle + authorname + pdate + ressummary + resurl;
+				
+				
+				resultplace.appendChild(row);
+				resultplace.appendChild(blank);
+				
+			}
+			
+			insertbutton();
+		}
+		function loadpage5(){
+		var resultplace = document.getElementById("resultplace");
+		resultplace.innerHTML = "";
+		
+			var i = 40;
+			var maxress = 50;
+			if(ret_length < 50) maxress = ret_length;
+			
+			for(i;i<maxress;i++){
+			
+				var blank = document.createElement("hr");
+				resultplace.appendChild(blank);
+				
+				var row = document.createElement("div");
+				row.className  = "row resultrow";
+				
+				var json = jsons[i];
+				
+				var criticTitle = json.criticTitle;
+				criticTitle = highlight(criticTitle);
+				var imageUrl = json.imageUrl;
+				if(imageUrl === "default") imageUrl = "./../resource/" + imageUrl + ".jpg";
+				var summary = json.summary;
+				summary = highlight(summary);
+				var author = json.author;
+				author = highlight(author);
+				var nytPick = json.nytPick;
+				var movieTitle = json.movieTitle;
+				movieTitle = highlight(movieTitle);
+				var publicationDate = json.publicationDate;
+				var url = json.url;
+				var mpaaRate = json.mpaaRate;
+				 
+				
+				var start =  '<div class="col-md-12"></div>';
+				var mtitle = '<div class = "col-md-4 container"><div class = "row"><div class="col-md-12"><h3>'+ movieTitle +'</h3></div>';
+				var mmprating = '<div class="col-md-8"><h5>Rating: '+ mpaaRate +'</h4></div>';
+				var NYTPick;
+				if(nytPick == "Y"){
+					NYTPick = '<div class="col-md-4"><h4>NYT Pick!</h4></div>';
+				}
+				else{
+					NYTPick = '<div class="col-md-4"><h4></h4></div>';
+				}
+				var resimage = '<div class="col-md-12"><a href="'+url+'"><img class="img-fluid rounded mb-3 mb-md-0" src="'+ imageUrl +'"></a></div></div></div>';
+				
+				var ctitle = '<div class="col-md-8 container"><div class="row"><div class="col-md-12"><a href="'+url+'"><h3>'+criticTitle+'</h3></a></div>';
+				var authorname = '<div class="col-md-5"><h4>'+ author +'</h4></div>';
+				var pdate = '<div class="col-md-7"><h4>'+ publicationDate +'</h4></div>';
+				var ressummary =  '<div class="col-md-12"><p>' + summary + '</p></div></div></div>';
+				var resurl = '<div class="col-md-12"><a href="'+url+'"><h5>' + url + '</h5></a></div><div class="col-md-12"></div>';
+				
+				
+				row.innerHTML = start + mtitle + mmprating + NYTPick + resimage + ctitle + authorname + pdate + ressummary + resurl;
+				
+				
+				resultplace.appendChild(row);
+				resultplace.appendChild(blank);
+				
+			}
+			
+			insertbutton();
+		}
+		
+		function send(){
+			queryinput = document.getElementById("queryinput");
+			query = queryinput.value;
+			line = "result.html?user_id=1111&query=" + query; 
+			if(query = "");
+			else{
+				window.open(line,"_self");
+				}
+			}
+	
+		function retrival(){
+				var queryString = window.location.search.slice(1);	
+				
+				if(queryString == ""||queryString == "user_id=1111&query=");
+				else{
+				
+				var arr = queryString.split('&');
+				var a = new Array();
+				for (var i=0; i<arr.length; i++) {
+				// separate the keys and the values
+				var a = arr[i].split('=')[1].replace("%20"," ");
+				}
+
+				
+				userquery = a;
+				
+				queryinput = document.getElementById("queryinput");
+				queryinput.value = userquery;
+				
+				var xmlhttp;
+				xmlhttp = new XMLHttpRequest();
+				
+				
+				xmlhttp.onreadystatechange = function(){
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+										
+						jsons = JSON.parse(xmlhttp.responseText);
+						ret_length = jsons.length;
+						
+						if(ret_length > 0){
+							loadpage1();
+						} else {
+							var resultplace = document.getElementById("resultplace");
+						      resultplace.innerHTML = "";
+						      var row = document.createElement("div");
+						      row.className  = "row";
+						      var waiting = '<div class="col-md-2"></div><div class="col-md-8"><h1>Sorry, no related critics found...</h1><br/><br/></div><div class="col-md-2"></div>';
+						      row.innerHTML = waiting;
+						      resultplace.appendChild(row);
+						}
+					} else if (xmlhttp.readyState < 4) {
+					      var resultplace = document.getElementById("resultplace");
+					      resultplace.innerHTML = "";
+					      var row = document.createElement("div");
+					      row.className  = "row";
+					      var waiting = '<div class="col-md-2"></div><div class="col-md-8"><h1>Now Loading...</h1><br/><br/></div><div class="col-md-2"></div>';
+					      row.innerHTML = waiting;
+					      resultplace.appendChild(row);
+					} 
+				}
+				
+				/* xmlhttp.open("GET","http://localhost:8080/MCsearch/GeneralSearch?user_id=1111&query="+userquery,true); */
+				xmlhttp.open("GET","http://localhost:8080/MCsearch/GeneralSearch?user_id=1111&query="+userquery,true);
+				xmlhttp.send();
+				}
+				
+			}
+			
+	</script>
+	
+
+</html>

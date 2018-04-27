@@ -2,6 +2,12 @@ package path;
 
 public class AllPath {
 	// 此处必须是绝对路径，不然找不到index
+//	public static String Preprocessed = "prepDoc//"; // address of preprocessed docs, title, content, author, ctitle
+//	public static String parsedResource = "/home/ubuntu/reso"; // folder to store parsed
+//	public static String titleIndex = "/home/ubuntu/titleIndex";
+//	public static String contentIndex = "/home/ubuntu/contentIndex";
+//	public static String authorIndex = "/home/ubuntu/authorIndex";
+//	public static String ctitleIndex = "/home/ubuntu/ctitleIndex";
 	public static String Preprocessed = "prepDoc//"; // address of preprocessed docs, title, content, author, ctitle
 	public static String parsedResource = "init//parsedResource//reso"; // folder to store parsed
 	public static String titleIndex = "//Users/Duke//eclipseEE-workspace//MCsearch//engineConstruction//titleIndex";

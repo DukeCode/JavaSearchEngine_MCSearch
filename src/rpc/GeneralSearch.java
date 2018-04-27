@@ -48,19 +48,23 @@ public class GeneralSearch extends HttpServlet {
 		query = eq.process(query); // parse query
 		try {
 			List<EngDoc> results = gs.retrieveQuery(query, 50); // show top 50 results
-			Set<String> favorite = conn.getFavoriteDocIds(userId);
+//			Set<String> favorite = conn.getFavoriteDocIds(userId);
 			for (EngDoc doc : results) {
 				MyDoc tempDoc = conn.getDoc(doc.docno());
 				JSONObject obj = tempDoc.toJSONObject();
-				if (favorite != null) {
-					obj.put("favorite", favorite.contains(doc.docno()));
-				}
+//				if (favorite != null) {
+//					obj.put("favorite", favorite.contains(doc.docno()));
+//				}
 				list.add(obj);
 			}
 		} catch (Exception e) {
-			System.out.println("bug");
+			e.printStackTrace();
 		}
-		array = new JSONArray(list); // return JSON to front-end
+		if (list.isEmpty()) {
+			array = new JSONArray();
+		} else {
+			array = new JSONArray(list); // return JSON to front-end
+		}
 		RpcHelper.writeJsonArray(response, array);
 		conn.close();
 	}

@@ -64,8 +64,9 @@ public class ComplicatedSearch extends HttpServlet {
 		authorQ = eq.process(authorQ); 
 		contentQ = eq.process(contentQ); 
 		List<JSONObject> list = new ArrayList<>();
+		JSONArray array = null;
 		try {
-			List<EngDoc> results = gs.retrieveQuery(movieTitleQ, criticTitleQ, authorQ, contentQ, 50); // show top 50 results
+			List<EngDoc> results = gs.retrieveQuery(movieTitleQ, criticTitleQ, contentQ, authorQ, 50); // show top 50 results
 			Set<String> favorite = conn.getFavoriteDocIds(userId);
 			for (EngDoc doc : results) {
 				MyDoc tempDoc = conn.getDoc(doc.docno());
@@ -78,7 +79,11 @@ public class ComplicatedSearch extends HttpServlet {
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		JSONArray array = new JSONArray(list); // return JSON to front-end
+		if (list.isEmpty()) {
+			array = new JSONArray();
+		} else {
+			array = new JSONArray(list); // return JSON to front-end
+		}
 		RpcHelper.writeJsonArray(response, array);
 		conn.close();
 	}

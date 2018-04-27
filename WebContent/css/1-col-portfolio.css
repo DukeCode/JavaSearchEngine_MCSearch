@@ -1,0 +1,35 @@
+/*!
+ * Start Bootstrap - 1 Col Portfolio (https://startbootstrap.com/template-overviews/1-col-portfolio)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-1-col-portfolio/blob/master/LICENSE)
+ */
+
+body {
+  padding-top: 54px;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+.pagination {
+  margin-bottom: 15px;
+}
+
+.logo{
+	font-family: 'Dancing Script', cursive;
+	font-size: 5em;
+}
+.logo:hover{
+	opacity: 0.5;
+}
+
+.resultrow:hover{
+	border-style: solid;
+	border-radius: 12px;
+	border-color: SILVER;
+	background-color:rgba(100,150,255,0.4);
+	border-width: 5px;
+}

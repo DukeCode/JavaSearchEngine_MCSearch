@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>General Search</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./../css/1-col-portfolio.css" rel="stylesheet">
+
+	<link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+	
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="./../index.html">Movie Review Search</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../index.html">General Search </a>
+            </li>
+			<li class="nav-item active">
+              <a class="nav-link" href="complicatedmain.html">Complicated Search
+			  <span class="sr-only">(current)</span></a>
+			  
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+	<br>
+	<br>
+	
+		<div class="row">
+	<div class = "col-md-1"> </div>
+	<div class = "col-md-5"> 
+	<a href = "complicatedmain.html"><img src = "./../resource/logo.png" style = "width:5em;height:5em;" class = "logo"/></a>
+	</div>
+	<div class = "col-md-5"> <br><br><br><p class = "logo">Tripod Movie <br> Critic Search<p>
+	</div>
+	<div class = "col-md-1"> </div></div>
+	<br>
+	<br>
+  
+      <!-- Project One -->
+      <div class="row">
+	  <div class = "col-md-1"> </div>
+	  <input class = "col-md-7" id = "movie_title" type = "text"  placeholder="Movie Title:" ></input> 
+	  <div class = "col-md-1"> </div>
+	  <div class = "col-md-2"> </div>
+	  <div class = "col-md-1"> </div></div>
+	  
+	  <div class="row">
+	  <div class = "col-md-1"> </div>
+	  <input class = "col-md-7" id = "critic_title" type = "text"  placeholder="Critic Title:" ></input> 
+	  <div class = "col-md-1"> </div>
+	  <div class = "col-md-2"> </div>
+	  <div class = "col-md-1"> </div></div>
+	  
+	  <div class="row">
+	  <div class = "col-md-1"> </div>
+	  <input class = "col-md-7" id = "author_name" type = "text"  placeholder="Author Name:" ></input> 
+	  <div class = "col-md-1"> </div>
+	  <div class = "col-md-2"> </div>
+	  <div class = "col-md-1"> </div></div>
+	  
+	  <div class="row">
+	  <div class = "col-md-1"> </div>
+	  <input class = "col-md-7" id = "critic_content" type = "text"  placeholder="Critic Content:" ></input> 
+	  <div class = "col-md-1"> </div>
+	  <button class = "col-md-2 btn btn-info" onclick = "send();" >Search</button>
+	  <div class = "col-md-1"> </div></div>
+  
+      </div>
+      <!-- /.row -->
+
+     <br>
+	  <br>
+	 <br>
+	  <br>
+	 <br>
+	 <br>
+	 <br>
+
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; https://www.nytimes.com/reviews/movies</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="./../vendor/jquery/jquery.min.js"></script>
+    <script src="./../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+	<script>
+	
+	function send(){
+			var movie_title_v = document.getElementById("movie_title").value;
+			var critic_title_v = document.getElementById("critic_title").value;
+			var critic_content_v = document.getElementById("critic_content").value;
+			var author_name_v = document.getElementById("author_name").value;
+			
+			if(movie_title_v == "" && critic_title_v == "" && critic_content == "" && author_name == ""){
+				window.open("comresult.html?user_id=1111","_self");
+			}
+			else{
+				var line = "comresult.html?user_id=1111&movieTitle=" + movie_title_v + "&criticTitle=" + critic_title_v + "&author=" + author_name_v + "&content=" + critic_content_v; 
+				window.open(line,"_self");
+			}
+		}
+	
+	var movie_title = document.getElementById("movie_title");
+		
+	movie_title.addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+			send();
+		}
+	});
+	
+	var critic_title = document.getElementById("critic_title");
+		
+	critic_title.addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+			send();
+		}
+	});
+	
+	var critic_content = document.getElementById("critic_content");
+		
+	critic_content.addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+			send();
+		}
+	});
+	
+	var author_name = document.getElementById("author_name");
+		
+	author_name.addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+			send();
+		}
+	});
+	
+</script>
+
+</html>
